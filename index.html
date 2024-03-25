@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            body: ['Manrope']
+          },
+          colors: {
+            red: ['#FF6B6B'],
+            yellow: ['#FFC895'],
+            green: ['#DDFF95'],
+            grey: ['#D9D9D9']
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="p-20 font-body bg-[#0E0E0E] text-white">
+  <p class="text-8xl tracking-tighter">THE COUPLERS ୨ৎ CODE SMELLS</p>
+  <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg">IGNATIUS DE LOYOLA JURIAN RATRIA GALIH (2602206972) - IVANDER HANSON SETYAWAN (2602195861)</p>
+
+  <!--FEATURE ENVY-->
+  <div>
+    <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
+        <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
+          FEATURE ENVY
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          Sebuah method mengakses data dari objek lain lebih sering dibanding datanya sendiri.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap w-full gap-12 pt-10">
+      <div class="grow">
+        <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
+  <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class Order {
+  private Customer customer;
+  public Customer getCustomer() {
+    return customer;
+  }
+  public double calculateTotal() {
+    <b class="text-red-0">// Menggunakan data hanya dari Customer</b>
+    return customer.calculateTotalOrderPrice();
+  }
+}
+class Customer {
+  private List<Order> orders;
+  public double calculateTotalOrderPrice() {
+    double total = 0;
+    for (Order order : orders) {
+      total += order.getPrice();
+    }
+    return total;
+  }
+}</code>
+</pre>
+      </div>
+      <div class="grow">
+        <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
+    <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class Order {
+  private Customer customer;
+
+  public Customer getCustomer() {
+    return customer;
+  }
+
+  public double calculateTotal() {
+    <b class="text-green-0">// Menggunakan data hanya dari Order sendiri</b>
+    return calculateTotalOrderPrice();
+  }
+
+  <b class="text-green-0">// Memindahkan method dari Customer sehingga dapat langsung diakses oleh Order</b>
+  private double calculateTotalOrderPrice() {
+    double total = 0;
+    for (Order order : orders) {
+      total += order.getPrice();
+    }
+    return total;
+  }
+}</code>
+</pre>
+      </div>
+    </div>
+  </div>
+
+  <!--INAPROPRIATE INTIMACY-->
+  <div>
+    <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
+        <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
+          INAPROPRIATE INTIMACY
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          Sebuah class mengakses variabel internal dan berbagai method dari class lain.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap w-full gap-12 pt-10">
+      <div class="grow">
+        <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
+        <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class Customer {
+  private String name;
+  private Address address;
+
+  public String getName() {
+      return name;
+  }
+
+  public String getFullAddress() {
+      <b class="text-red-0">// Mengakses secara langsung semua variabel internal dari Address</b>
+      return address.getStreet() + ", " + address.getCity() + ", " + address.getCountry();
+  }
+}
+
+class Address {
+  private String street;
+  private String city;
+  private String country;
+
+  public String getStreet() {
+      return street;
+  }
+
+  public String getCity() {
+      return city;
+  }
+
+  public String getCountry() {
+      return country;
+  }
+}</code>
+</pre>
+      </div>
+      <div class="grow">
+        <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
+    <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class Customer {
+  private String name;
+  private Address address;
+
+  public String getName() {
+      return name;
+  }
+
+  public String getFullAddress() {
+      <b class="text-green-0">// Sudah tidak secara langsung mengakses semua variabel internal dari Address</b>
+      return address.getFullAddress();
+  }
+}
+
+class Address {
+  private String street;
+  private String city;
+  private String country;
+
+  public String getStreet() {
+      return street;
+  }
+
+  public String getCity() {
+      return city;
+  }
+
+  public String getCountry() {
+      return country;
+  }
+
+  <b class="text-green-0">// Menambahkan method untuk mendapatkan address penuh, sehingga tidak perlu menggunakan
+  // getters berkali-kali yang secara langsung mengakses variabel internal</b>
+  public String getFullAddress() {
+      return street + ", " + city + ", " + country;
+  }
+}</code>
+</pre>
+      </div>
+    </div>
+  </div>
+  
+  <!--MESSAGE CHAINS-->
+  <div>
+    <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
+        <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
+          MESSAGE CHAINS
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          Terjadi ketika meminta sebuah objek yang dimana objek yang diminta meminta objek lain dan objek lain ini juga meminta objek lain lagi dan seterusnya.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap w-full gap-12 pt-10">
+      <div class="grow">
+        <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
+        <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class A {
+  B b;
+
+  public String getInfo() {
+      <b class="text-red-0">// Terjadi message chain</b>
+      return b.getC().getValue();
+  }
+}
+
+class B {
+  C c;
+
+  public C getC() {
+      return c;
+  }
+}
+
+class C {
+  private String value;
+
+  public String getValue() {
+      return value;
+  }
+}</code>
+</pre>
+      </div>
+      <div class="grow">
+        <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
+    <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>class A {
+  B b;
+
+  public String getInfo() {
+      <b class="text-green-0">// Hanya memanggil satu method saja</b>
+      return b.getValueFromC();
+  }
+}
+
+class B {
+  C c;
+
+  <b class="text-green-0">// Langsung memanggil c tanpa perlu memanggil getC(), dan kemudian langsung memanggil
+  // valuenya, ini dilakukan sehingga tidak perlu menggunakan 2 method dalam memanggil value dari c pada
+  // class A yang mengakibatkan message chain</b>
+  public String getValueFromC() {
+      return c.getValue();
+  }
+}
+
+class C {
+  private String value;
+
+  public String getValue() {
+      return value;
+  }
+}</code>
+</pre>
+      </div>
+    </div>
+  </div>
+  
+  <!--MIDDLE MAN-->
+  <div>
+    <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
+        <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
+          MIDDLE MAN
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          Sebuah class hanya melakukan satu aksi dan berperan sebagai perantara untuk mengakses method dari kelas lain.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap w-full gap-12 pt-10">
+      <div class="grow">
+        <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
+        <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code>public class MiddleMan {
+  private OtherClass other;
+
+  public MiddleMan() {
+      this.other = new OtherClass();
+  }
+
+  public void doSomething() {
+      <b class="text-red-0">// Memanggil method dari OtherClass, MiddleMan tidak punya fungsi lain selain ini</b>
+      other.methodToCall();
+  }
+}
+
+public class OtherClass {
+  public void methodToCall() {
+      System.out.println("Method from OtherClass is called.");
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+      MiddleMan middleMan = new MiddleMan();
+      middleMan.doSomething();
+  }
+}</code>
+</pre>
+      </div>
+      <div class="grow">
+        <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
+    <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code><b class="text-green-0">// Class MiddleMan dihapus karena memiliki fungsi yang redundan, methodToCall() dapat langsung
+// dipanggil dari Main tanpa perlu melewati MiddleMan</b>
+
+ public class OtherClass {
+    public void methodToCall() {
+        System.out.println("Method from OtherClass is called.");
+    }
+}
+  
+public class Main {
+    public static void main(String[] args) {
+        OtherClass other = new OtherClass();
+        other.methodToCall();
+    }
+}</code>
+</pre>
+      </div>
+    </div>
+  </div>
+
+  <!--INCOMPLETE LIBRARY CLASS-->
+  <div>
+    <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
+        <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
+          INCOMPLETE LIBRARY CLASS
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          Penggunaan library tanpa fitur-fitur yang memenuhi kebutuhan dan tidak dapat dimodifikasi untuk memenuhi kebutuhan karena properti library adalah read-only.
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap w-full gap-12 pt-10">
+      <div class="grow">
+        <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
+        <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code><b class="text-red-0">// Misalkan ReadOnlyLibrary adalah library read-only, dan tidak memiliki fitur yang diperlukan,
+// sehingga perlu menambahkan fiturnya ke library, namun karena properti library read-only,
+// tidak dapat mengubah isi dari library, sehingga tidak dapat menambahkan fitur yang diperlukan</b>
+public class ReadOnlyLibrary {
+    private String data;
+  
+    public ReadOnlyLibrary(String data) {
+        this.data = data;
+    }
+  
+    public String getData() {
+        return data;
+    }
+}</code>
+</pre>
+      </div>
+      <div class="grow">
+        <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
+    <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
+<code><b class="text-green-0">// Solusinya membuat child class dari ReadOnlyLibrary, sehingga bisa menambahkan
+// fitur yang diperlukan ke library, tanpa perlu akses ke ReadOnlyLibrary</b>
+public class ExtendedLibrary extends ReadOnlyLibrary {
+    public ExtendedLibrary(String data) {
+        super(data);
+    }
+  
+    public void writeData(String newData) {
+        System.out.println("Menulis data baru: " + newData);
+    }
+}</code>
+</pre>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
