@@ -19,6 +19,23 @@
     section {
       padding-top: 1%;
     }
+    nav a {
+      transition: 0.3s linear;
+    }
+    nav a:hover {
+      color: #FFC895;
+    }
+    nav a::after {
+      content: '';
+      display: block;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #FFC895;
+      transform: scaleX(0);
+      transition: 0.3s linear;
+    }
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
   </style>
 
   <script src="https://cdn.tailwindcss.com"></script>
