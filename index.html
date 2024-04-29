@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>The Couplers</title>
+
+  <link rel="icon" type="image/x-icon" href="assets/Logo.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      scroll-behavior: smooth;
+    }
+    section {
+      padding-top: 1%;
+    }
+  </style>
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -26,12 +41,24 @@
     }
   </script>
 </head>
-<body class="p-20 font-body bg-[#0E0E0E] text-white">
-  <p class="text-8xl tracking-tighter">THE COUPLERS ୨ৎ CODE SMELLS</p>
-  <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg">IGNATIUS DE LOYOLA JURIAN RATRIA GALIH (2602206972) - IVANDER HANSON SETYAWAN (2602195861)</p>
+<body class="p-20 font-body bg-[#0E0E0E] text-white" id="TOP">
+  <nav class="fixed top-0 left-0 w-[100%] bg-gray-800 py-4 flex justify-around items-center">
+    <img src="assets/Logo.png" alt="" class="w-[4%] cursor-pointer" id="LOGO">
+    <a href="#FEATURE-ENVY">FEATURE ENVY</a>
+    <a href="#INAPPROPRIATE-INTIMACY">INAPPROPRIATE INTIMACY</a>
+    <a href="#MESSAGE-CHAINS">MESSAGE CHAINS</a>
+    <a href="#MIDDLE-MAN">MIDDLE MAN</a>
+    <a href="#INCOMPLETE-LIBRARY-CLASSES">INCOMPLETE LIBRARY CLASSES</a>
+  </nav>
+
+  <p class="py-10 text-7xl tracking-tighter">BAD CODE SMELL: THE COUPLERS ୨ৎ</p>
+  <p class="mt-4 text-yellow-0 tracking-wide font-medium text-lg">IGNATIUS DE LOYOLA JURIAN RATRIA GALIH (2602206972) & IVANDER HANSON SETYAWAN (2602195861)</p>
+  <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg">The Couplers:
+    <br>Mengacu pada hubungan yang berlebihan antar class atau pendelegasian yang berlebihan pada class.
+  </p>
 
   <!--FEATURE ENVY-->
-  <div>
+  <section id="FEATURE-ENVY">
     <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
     <div class="flex flex-col flex-wrap w-fit">
       <div>
@@ -39,7 +66,11 @@
           FEATURE ENVY
         </p>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
-          Sebuah method mengakses data dari objek lain lebih sering dibanding datanya sendiri.
+          Sebuah method mengakses lebih banyak data object/class lain daripada data nya sendiri.
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          <br><span class="text-yellow-0">Treatment: Move Method</span>
+          <br>Memindahkan method tersebut ke dalam class yang bersangkutan.
         </p>
       </div>
     </div>
@@ -48,24 +79,35 @@
       <div class="grow">
         <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
   <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class Order {
-  private Customer customer;
-  public Customer getCustomer() {
-    return customer;
+<code>class Customer {
+  private String name;
+  private int age;
+
+  public String getName() {
+      return name;
   }
-  public double calculateTotal() {
-    <b class="text-red-0">// Menggunakan data hanya dari Customer</b>
-    return customer.calculateTotalOrderPrice();
+
+  public int getAge() {
+      return age;
   }
 }
-class Customer {
-  private List<Order> orders;
-  public double calculateTotalOrderPrice() {
-    double total = 0;
-    for (Order order : orders) {
-      total += order.getPrice();
-    }
-    return total;
+
+class Invoice {
+  private Customer customer;
+  private int totalAmount;
+
+  public Invoice(Customer customer, int totalAmount) {
+      this.customer = customer;
+      this.totalAmount = totalAmount;
+  }
+
+  <b class="text-red-0">// Method generateInvoiceSummary() mengakses data Customer yang seharusnya menjadi tanggung jawab Customer itu sendiri.</b>
+  public String generateInvoiceSummary() {
+      String summary = "";
+      summary += "Customer Name: " + customer.getName() + "\n";
+      summary += "Customer Age: " + customer.getAge() + "\n";
+      summary += "Total Amount: $" + totalAmount + "\n";
+      return summary;
   }
 }</code>
 </pre>
@@ -73,34 +115,50 @@ class Customer {
       <div class="grow">
         <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
     <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class Order {
+<code>class Customer {
+  private String name;
+  private int age;
+
+  public String getName() {
+      return name;
+  }
+
+  public int getAge() {
+      return age;
+  }
+
+  <b class="text-green-0">// Hasil Refactor</b>
+  public String generateCustomerSummary() {
+      String summary = "";
+      summary += "Customer Name: " + name + "\n";
+      summary += "Customer Age: " + age + "\n";
+      return summary;
+  }
+}
+
+class Invoice {
   private Customer customer;
+  private int totalAmount;
 
-  public Customer getCustomer() {
-    return customer;
+  public Invoice(Customer customer, int totalAmount) {
+      this.customer = customer;
+      this.totalAmount = totalAmount;
   }
 
-  public double calculateTotal() {
-    <b class="text-green-0">// Menggunakan data hanya dari Order sendiri</b>
-    return calculateTotalOrderPrice();
-  }
-
-  <b class="text-green-0">// Memindahkan method dari Customer sehingga dapat langsung diakses oleh Order</b>
-  private double calculateTotalOrderPrice() {
-    double total = 0;
-    for (Order order : orders) {
-      total += order.getPrice();
-    }
-    return total;
+  <b class="text-green-0">// Hasil Refactor</b>
+  public String generateInvoiceSummary() {
+      String summary = customer.generateCustomerSummary();
+      summary += "Total Amount: $" + totalAmount + "\n";
+      return summary;
   }
 }</code>
 </pre>
       </div>
     </div>
-  </div>
+  </section>
 
   <!--INAPROPRIATE INTIMACY-->
-  <div>
+  <section id="INAPPROPRIATE-INTIMACY">
     <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
     <div class="flex flex-col flex-wrap w-fit">
       <div>
@@ -108,7 +166,11 @@ class Customer {
           INAPROPRIATE INTIMACY
         </p>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
-          Sebuah class mengakses variabel internal dan berbagai method dari class lain.
+          Sebuah class banyak memakai fields dan methods dari class lain.
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          <br><span class="text-yellow-0">Treatment: Replace Delegation with Inheritance</span>
+          <br>Mengubah pendelegasian/pemakaian menjadi inheritance.
         </p>
       </div>
     </div>
@@ -117,35 +179,30 @@ class Customer {
       <div class="grow">
         <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
         <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class Customer {
+<code>public class Person {
   private String name;
-  private Address address;
+  private int age;
 
   public String getName() {
       return name;
   }
 
-  public String getFullAddress() {
-      <b class="text-red-0">// Mengakses secara langsung semua variabel internal dari Address</b>
-      return address.getStreet() + ", " + address.getCity() + ", " + address.getCountry();
+  public int getAge() {
+      return age;
   }
 }
 
-class Address {
-  private String street;
-  private String city;
-  private String country;
-
-  public String getStreet() {
-      return street;
-  }
-
-  public String getCity() {
-      return city;
-  }
-
-  public String getCountry() {
-      return country;
+public class Employee {
+  private Person person;
+  private String department;
+  private double salary;
+  
+  <b class="text-red-0">// Method printDetails() memakai banyak method dari class Person</b>
+  public void printDetails() {
+      System.out.println("Name: " + person.getName());
+      System.out.println("Age: " + person.getAge());
+      System.out.println("Department: " + department);
+      System.out.println("Salary: " + salary);
   }
 }</code>
 </pre>
@@ -153,50 +210,38 @@ class Address {
       <div class="grow">
         <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
     <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class Customer {
+<code>public class Person {
   private String name;
-  private Address address;
+  private int age;
 
   public String getName() {
       return name;
   }
 
-  public String getFullAddress() {
-      <b class="text-green-0">// Sudah tidak secara langsung mengakses semua variabel internal dari Address</b>
-      return address.getFullAddress();
+  public int getAge() {
+      return age;
   }
 }
 
-class Address {
-  private String street;
-  private String city;
-  private String country;
-
-  public String getStreet() {
-      return street;
-  }
-
-  public String getCity() {
-      return city;
-  }
-
-  public String getCountry() {
-      return country;
-  }
-
-  <b class="text-green-0">// Menambahkan method untuk mendapatkan address penuh, sehingga tidak perlu menggunakan
-  // getters berkali-kali yang secara langsung mengakses variabel internal</b>
-  public String getFullAddress() {
-      return street + ", " + city + ", " + country;
+<b class="text-green-0">// Hasil Refactor</b>
+public class Employee extends Person {
+  private String department;
+  private double salary;
+  
+  public void printDetails() {
+      System.out.println("Name: " + getName());
+      System.out.println("Age: " + getAge());
+      System.out.println("Department: " + department);
+      System.out.println("Salary: " + salary);
   }
 }</code>
 </pre>
       </div>
     </div>
-  </div>
+  </section>
   
   <!--MESSAGE CHAINS-->
-  <div>
+  <section id="MESSAGE-CHAINS">
     <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
     <div class="flex flex-col flex-wrap w-fit">
       <div>
@@ -204,7 +249,13 @@ class Address {
           MESSAGE CHAINS
         </p>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
-          Terjadi ketika meminta sebuah objek yang dimana objek yang diminta meminta objek lain dan objek lain ini juga meminta objek lain lagi dan seterusnya.
+          Terjadi ketika code membentuk serangkaian panggilan, seperti $a->b()->c()->d().
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          <br><span class="text-yellow-0">Treatment 1: Move Method</span>
+          <br>Memindahkan Method terkait.
+          <br><span class="text-yellow-0">Treatment 2: Replace Delegation with Inheritance</span>
+          <br>Mengubah pendelegasian/pemakaian menjadi inheritance.
         </p>
       </div>
     </div>
@@ -213,28 +264,36 @@ class Address {
       <div class="grow">
         <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
         <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class A {
-  B b;
+<code>class Customer {
+  private String address;
 
-  public String getInfo() {
-      <b class="text-red-0">// Terjadi message chain</b>
-      return b.getC().getValue();
+  public String getAddress() {
+      return address;
   }
 }
 
-class B {
-  C c;
-
-  public C getC() {
-      return c;
+class Order {
+  private Customer customer;
+  
+  public Customer getCustomer() {
+      return customer;
   }
 }
 
-class C {
-  private String value;
+class Invoice {
+  private Order order;
 
-  public String getValue() {
-      return value;
+  public Order getOrder() {
+      return order;
+  }
+}
+
+class InvoicePage {
+  private Invoice invoice;
+
+  public String getCustomerAddress() {
+      <b class="text-red-0">// Code berikut membentuk serangkaian panggilan</b>
+      return invoice.getOrder().getCustomer().getAddress();
   }
 }</code>
 </pre>
@@ -242,40 +301,53 @@ class C {
       <div class="grow">
         <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
     <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>class A {
-  B b;
+<code>class Customer {
+  private String address;
 
-  public String getInfo() {
-      <b class="text-green-0">// Hanya memanggil satu method saja</b>
-      return b.getValueFromC();
+  public String getAddress() {
+      return address;
   }
 }
 
-class B {
-  C c;
-
-  <b class="text-green-0">// Langsung memanggil c tanpa perlu memanggil getC(), dan kemudian langsung memanggil
-  // valuenya, ini dilakukan sehingga tidak perlu menggunakan 2 method dalam memanggil value dari c pada
-  // class A yang mengakibatkan message chain</b>
-  public String getValueFromC() {
-      return c.getValue();
+class Order {
+  private Customer customer;
+  
+  public Customer getCustomer() {
+      return customer;
+  }
+  
+  public String getCustomerAddress() {
+      return customer.getAddress();
   }
 }
 
-class C {
-  private String value;
+class Invoice {
+  private Order order;
 
-  public String getValue() {
-      return value;
+  public Order getOrder() {
+      return order;
+  }
+  
+  public String getCustomerAddress() {
+      return order.getCustomerAddress();
+  }
+}
+
+class InvoicePage {
+  private Invoice invoice;
+
+  <b class="text-green-0">// Hasil Refactor</b>
+  public String getCustomerAddress() {
+      return invoice.getCustomerAddress();
   }
 }</code>
 </pre>
       </div>
     </div>
-  </div>
+  </section>
   
   <!--MIDDLE MAN-->
-  <div>
+  <section id="MIDDLE-MAN">
     <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
     <div class="flex flex-col flex-wrap w-fit">
       <div>
@@ -283,7 +355,11 @@ class C {
           MIDDLE MAN
         </p>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
-          Sebuah class hanya melakukan satu aksi dan berperan sebagai perantara untuk mengakses method dari kelas lain.
+          Sebuah class memiliki delegasi dengan banyak class lain.
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          <br><span class="text-yellow-0">Treatment: Remove Middle Man</span>
+          <br>Hapus Middle Man jika tidak diperlukan.
         </p>
       </div>
     </div>
@@ -292,29 +368,40 @@ class C {
       <div class="grow">
         <p class="text-2xl text-red-0 tracking-tight font-bold">CONTOH</p>
         <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code>public class MiddleMan {
-  private OtherClass other;
-
-  public MiddleMan() {
-      this.other = new OtherClass();
-  }
-
-  public void doSomething() {
-      <b class="text-red-0">// Memanggil method dari OtherClass, MiddleMan tidak punya fungsi lain selain ini</b>
-      other.methodToCall();
+<code>class Customer {
+  public Customer getCustomer() {
+    return this;
   }
 }
 
-public class OtherClass {
-  public void methodToCall() {
-      System.out.println("Method from OtherClass is called.");
+class Order {
+  public Order getOrder() {
+    return this;
   }
 }
 
-public class Main {
-  public static void main(String[] args) {
-      MiddleMan middleMan = new MiddleMan();
-      middleMan.doSomething();
+class Invoice {
+  public Invoice getInvoice() {
+    return this;
+  }
+}
+
+<b class="text-red-0">// Class ini menjadi perantara class lainnya yang seharusnya dapat dihilangkan</b>
+class InvoicePage {
+  private Customer customer;
+  private Order order;
+  private Invoice invoice;
+
+  public Customer getCustomer() {
+      return customer;
+  }
+
+  public Order getOrder() {
+      return order;
+  }
+
+  public Invoice getInvoice() {
+      return invoice;
   }
 }</code>
 </pre>
@@ -322,36 +409,46 @@ public class Main {
       <div class="grow">
         <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
     <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code><b class="text-green-0">// Class MiddleMan dihapus karena memiliki fungsi yang redundan, methodToCall() dapat langsung
-// dipanggil dari Main tanpa perlu melewati MiddleMan</b>
-
- public class OtherClass {
-    public void methodToCall() {
-        System.out.println("Method from OtherClass is called.");
-    }
+<code>class Customer {
+  public Customer getCustomer() {
+    return this;
+  }
 }
-  
-public class Main {
-    public static void main(String[] args) {
-        OtherClass other = new OtherClass();
-        other.methodToCall();
-    }
-}</code>
+
+class Order {
+  public Order getOrder() {
+    return this;
+  }
+}
+
+class Invoice {
+  public Invoice getInvoice() {
+    return this;
+  }
+}
+
+<b class="text-green-0">// Hasil Refactor</b></code>
 </pre>
       </div>
     </div>
-  </div>
+  </section>
 
   <!--INCOMPLETE LIBRARY CLASS-->
-  <div>
+  <section id="INCOMPLETE-LIBRARY-CLASSES">
     <div class="mt-32 bg-grey-0 bg-opacity-60 my-10 w-full h-[2px]"></div>
     <div class="flex flex-col flex-wrap w-fit">
       <div>
         <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
-          INCOMPLETE LIBRARY CLASS
+          INCOMPLETE LIBRARY CLASSES
         </p>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
-          Penggunaan library tanpa fitur-fitur yang memenuhi kebutuhan dan tidak dapat dimodifikasi untuk memenuhi kebutuhan karena properti library adalah read-only.
+          Penggunaan library yang sudah tidak relevan lagi dan tidak dapat dimodifikasi karena aksesnya read-only.
+        </p>
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+          <br><span class="text-yellow-0">Treatment 1: Introduce Foreign Method</span>
+          <br>Buat method baru dan masukkan object/class dari library ke dalamnya.
+          <br><span class="text-yellow-0">Treatment 2: Introduce Local Extension</span>
+          <br>Buat class baru sebagai inheritance dari class di library atau delegasikan class di library.
         </p>
       </div>
     </div>
@@ -379,7 +476,19 @@ public class ReadOnlyLibrary {
       <div class="grow">
         <p class="text-2xl text-green-0 tracking-tight font-bold">SOLUSI</p>
     <pre class="bg-grey-0 bg-opacity-5 rounded-lg p-4 mt-4 font-medium grow">
-<code><b class="text-green-0">// Solusinya membuat child class dari ReadOnlyLibrary, sehingga bisa menambahkan
+<code>public class ReadOnlyLibrary {
+  private String data;
+
+  public ReadOnlyLibrary(String data) {
+      this.data = data;
+  }
+
+  public String getData() {
+      return data;
+  }
+}
+
+<b class="text-green-0">// Solusinya membuat child class dari ReadOnlyLibrary, sehingga bisa menambahkan
 // fitur yang diperlukan ke library, tanpa perlu akses ke ReadOnlyLibrary</b>
 public class ExtendedLibrary extends ReadOnlyLibrary {
     public ExtendedLibrary(String data) {
@@ -393,7 +502,19 @@ public class ExtendedLibrary extends ReadOnlyLibrary {
 </pre>
       </div>
     </div>
-  </div>
+  </section>
+
+<footer class="p-10 w-[100%] flex justify-around items-center">
+  <img src="assets/Thankyou.gif" alt="">
+  <img src="assets/Thankyou.gif" alt="">
+</footer>
+
+<script>
+    const logo = document.getElementById('LOGO');
+    logo.addEventListener('click', function() {
+        window.location.href = '#TOP';
+    });
+</script>
 
 </body>
 </html>
