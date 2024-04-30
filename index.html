@@ -36,6 +36,25 @@
     nav a:hover::after {
       transform: scaleX(1);
     }
+    pre {
+      white-space: pre-wrap; 
+      word-break: break-word;
+    }
+    @media(max-width: 1360px) {
+      nav {
+        font-size: 14px;
+      }
+    }
+    @media(max-width: 768px) {
+      nav {
+        font-size: 12px;
+      }
+    }
+    @media(max-width: 600px) {
+      nav {
+        font-size: 10px;
+      }
+    }
   </style>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -60,8 +79,8 @@
 </head>
 <body class="p-20 font-body bg-[#0E0E0E] text-white" id="TOP">
   <nav class="fixed top-0 left-0 w-[100%] bg-gray-800 py-4 flex justify-around items-center">
-    <img src="assets/Logo.png" alt="" class="w-[4%] cursor-pointer" id="LOGO">
-    <a href="#FEATURE-ENVY">FEATURE ENVY</a>
+    <img src="assets/Logo.png" alt="" class="w-[4%] cursor-pointer mr-2" id="LOGO">
+    <a href="#FEATURE-ENVY" class="ml-2">FEATURE ENVY</a>
     <a href="#INAPPROPRIATE-INTIMACY">INAPPROPRIATE INTIMACY</a>
     <a href="#MESSAGE-CHAINS">MESSAGE CHAINS</a>
     <a href="#MIDDLE-MAN">MIDDLE MAN</a>
@@ -147,7 +166,7 @@ class Invoice {
       return age;
   }
 
-  <b class="text-green-0">// Hasil Refactor</b>
+  <b class="text-green-0">// Hasil Refactor -> memindahkan method yang diperlukan ke class yang bersangkutan</b>
   public String generateCustomerSummary() {
       String summary = "";
       summary += "Customer Name: " + name + "\n";
@@ -165,7 +184,7 @@ class Invoice {
       this.totalAmount = totalAmount;
   }
 
-  <b class="text-green-0">// Hasil Refactor</b>
+  <b class="text-green-0">// Hasil Refactor -> menghilangkan penggunaan data class lain dengan move method</b>
   public String generateInvoiceSummary() {
       String summary = customer.generateCustomerSummary();
       summary += "Total Amount: $" + totalAmount + "\n";
@@ -246,7 +265,7 @@ public class Employee {
   }
 }
 
-<b class="text-green-0">// Hasil Refactor</b>
+<b class="text-green-0">// Hasil Refactor -> membuat class Employee menjadi inheritance dari class Person untuk menghilangkan pemakaian method class lain</b>
 public class Employee extends Person {
   private String department;
   private double salary;
@@ -368,7 +387,7 @@ class Invoice {
 class InvoicePage {
   private Invoice invoice;
 
-  <b class="text-green-0">// Hasil Refactor</b>
+  <b class="text-green-0">// Hasil Refactor -> menghilangkan chains dengan membuat method di class-class yang berkaitan</b>
   public String getCustomerAddress() {
       return invoice.getCustomerAddress();
   }
@@ -468,7 +487,7 @@ class Invoice {
   }
 }
 
-<b class="text-green-0">// Hasil Refactor</b></code>
+<b class="text-green-0">// Hasil Refactor -> menghapus Middle Man</b></code>
 </pre>
       </div>
     </div>
@@ -548,9 +567,9 @@ public class ExtendedLibrary extends ReadOnlyLibrary {
     </div>
   </section>
 
-<footer class="p-10 w-[100%] flex justify-around items-center">
-  <img src="assets/Thankyou.gif" alt="">
-  <img src="assets/Thankyou.gif" alt="">
+<footer class="p-10 w-[100%] flex justify-around items-center flex-wrap">
+  <img src="assets/Thankyou.gif" alt="" class="mt-10">
+  <img src="assets/Thankyou.gif" alt="" class="mt-10">
 </footer>
 
 <script>
