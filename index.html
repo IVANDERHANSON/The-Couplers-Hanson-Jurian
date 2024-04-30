@@ -85,6 +85,9 @@
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           Sebuah method mengakses lebih banyak data object/class lain daripada data nya sendiri.
         </p>
+        <div class="p-10 flex justify-center items-center">
+          <img src="assets/FEATURE-ENVY.png" alt="" class="w-[50%]">
+        </div>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           <br><span class="text-yellow-0">Treatment: Move Method</span>
           <br>Memindahkan method tersebut ke dalam class yang bersangkutan.
@@ -185,6 +188,9 @@ class Invoice {
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           Sebuah class banyak memakai fields dan methods dari class lain.
         </p>
+        <div class="p-10 flex justify-center items-center">
+          <img src="assets/INAPPROPRIATE-INTIMACY.png" alt="" class="w-[50%]">
+        </div>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           <br><span class="text-yellow-0">Treatment: Replace Delegation with Inheritance</span>
           <br>Mengubah pendelegasian/pemakaian menjadi inheritance.
@@ -268,6 +274,15 @@ public class Employee extends Person {
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           Terjadi ketika code membentuk serangkaian panggilan, seperti $a->b()->c()->d().
         </p>
+      </div>
+    </div>
+
+    <div class="p-10 flex justify-center items-center">
+      <img src="assets/MESSAGE-CHAINS.png" alt="" class="w-[50%]">
+    </div>
+
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           <br><span class="text-yellow-0">Treatment 1: Move Method</span>
           <br>Memindahkan Method terkait.
@@ -374,6 +389,15 @@ class InvoicePage {
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           Sebuah class memiliki delegasi dengan banyak class lain.
         </p>
+      </div>
+    </div>
+
+    <div class="p-10 flex justify-center items-center">
+      <img src="assets/MIDDLE-MAN.png" alt="" class="w-[50%]">
+    </div>
+
+    <div class="flex flex-col flex-wrap w-fit">
+      <div>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           <br><span class="text-yellow-0">Treatment: Remove Middle Man</span>
           <br>Hapus Middle Man jika tidak diperlukan.
@@ -458,9 +482,12 @@ class Invoice {
         <p class="text-4xl text-yellow-0 tracking-tight font-semibold">
           INCOMPLETE LIBRARY CLASSES
         </p>
-        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
+        <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg">
           Penggunaan library yang sudah tidak relevan lagi dan tidak dapat dimodifikasi karena aksesnya read-only.
         </p>
+        <div class="p-10 flex justify-center items-center">
+          <img src="assets/INCOMPLETE-LIBRARY-CLASSES.png" alt="" class="w-[50%]">
+        </div>
         <p class="mt-4 text-grey-0 tracking-wide font-medium text-lg max-w-[50rem]">
           <br><span class="text-yellow-0">Treatment 1: Introduce Foreign Method</span>
           <br>Buat method baru dan masukkan object/class dari library ke dalamnya.
